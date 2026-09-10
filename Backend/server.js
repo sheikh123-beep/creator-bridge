@@ -3,7 +3,6 @@ const cors = require("cors");
 require("dotenv").config();
 
 const connectDB = require("./config/db");
-const { transporter } = require("./controllers/authController");
 
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
@@ -14,6 +13,7 @@ const chatRoutes = require("./routes/chatRoutes");
 const creatorRoutes = require("./routes/creatorRoutes");
 
 const app = express();
+
 const PORT = process.env.PORT || 5000;
 
 // =========================
@@ -57,17 +57,4 @@ app.use("/api/creators", creatorRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
-
-  // =========================
-  // SMTP CHECK
-  // =========================
-
-  transporter.verify((error) => {
-    if (error) {
-      console.error("SMTP connection failed ❌");
-      console.error(error.message);
-    } else {
-      console.log("SMTP server ready ✅");
-    }
-  });
 });

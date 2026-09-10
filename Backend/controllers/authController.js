@@ -1,26 +1,14 @@
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
 const User = require("../models/User");
 
 // =========================
-// EMAIL CONFIGURATION
+// RESEND EMAIL CONFIGURATION
 // =========================
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  family: 4,
 
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_APP_PASSWORD,
-  },
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-  connectionTimeout: 30000,
-  greetingTimeout: 30000,
-  socketTimeout: 30000,
-});
 // =========================
 // GENERATE OTP
 // =========================
@@ -125,130 +113,151 @@ const sendOTP = async (req, res) => {
     }
 
     // =========================
-    // SEND EMAIL
+    // SEND EMAIL USING RESEND
     // =========================
 
-    const mailResult = await transporter.sendMail({
-      from: `"Creator Bridge" <${process.env.EMAIL_USER}>`,
-      to: cleanEmail,
-      subject: "Your Creator Bridge Verification Code",
+    const { data: mailResult, error: mailError } =
+      await resend.emails.send({
+        from: "Creator Bridge <onboarding@resend.dev>",
+        to: [cleanEmail],
+        subject: "Your Creator Bridge Verification Code",
 
-      // Plain text fallback
-      text: `Your Creator Bridge verification code is ${otp}. This code will expire in 5 minutes.`,
+        // Plain text fallback
+        text: `Your Creator Bridge verification code is ${otp}. This code will expire in 5 minutes.`,
 
-      // HTML email
-      html: `
-        <!DOCTYPE html>
-        <html>
-          <body
-            style="
-              margin: 0;
-              padding: 0;
-              background-color: #f9fafb;
-              font-family: Arial, sans-serif;
-            "
-          >
-            <div
+        // HTML email
+        html: `
+          <!DOCTYPE html>
+          <html>
+            <body
               style="
-                padding: 40px 20px;
+                margin: 0;
+                padding: 0;
+                background-color: #f9fafb;
+                font-family: Arial, sans-serif;
               "
             >
               <div
                 style="
-                  max-width: 500px;
-                  margin: 0 auto;
-                  background-color: #ffffff;
-                  border: 1px solid #e5e7eb;
-                  border-radius: 16px;
-                  padding: 35px;
+                  padding: 40px 20px;
                 "
               >
-
-                <h1
-                  style="
-                    text-align: center;
-                    margin: 0 0 10px 0;
-                    color: #111827;
-                    font-size: 28px;
-                  "
-                >
-                  Creator<span style="color: #9333ea;">Bridge</span>
-                </h1>
-
-                <h2
-                  style="
-                    text-align: center;
-                    color: #111827;
-                    margin-top: 25px;
-                  "
-                >
-                  Verify your email
-                </h2>
-
-                <p
-                  style="
-                    text-align: center;
-                    color: #6b7280;
-                    font-size: 15px;
-                    line-height: 1.6;
-                  "
-                >
-                  Use the verification code below to continue
-                  with Creator Bridge.
-                </p>
-
                 <div
                   style="
-                    text-align: center;
-                    margin: 30px 0;
+                    max-width: 500px;
+                    margin: 0 auto;
+                    background-color: #ffffff;
+                    border: 1px solid #e5e7eb;
+                    border-radius: 16px;
+                    padding: 35px;
                   "
                 >
-                  <div
+
+                  <h1
                     style="
-                      display: inline-block;
-                      background-color: #f3e8ff;
-                      color: #7e22ce;
-                      font-size: 32px;
-                      font-weight: bold;
-                      letter-spacing: 8px;
-                      padding: 18px 25px;
-                      border-radius: 12px;
+                      text-align: center;
+                      margin: 0 0 10px 0;
+                      color: #111827;
+                      font-size: 28px;
                     "
                   >
-                    ${otp}
+                    Creator<span style="color: #9333ea;">Bridge</span>
+                  </h1>
+
+                  <h2
+                    style="
+                      text-align: center;
+                      color: #111827;
+                      margin-top: 25px;
+                    "
+                  >
+                    Verify your email
+                  </h2>
+
+                  <p
+                    style="
+                      text-align: center;
+                      color: #6b7280;
+                      font-size: 15px;
+                      line-height: 1.6;
+                    "
+                  >
+                    Use the verification code below to continue
+                    with Creator Bridge.
+                  </p>
+
+                  <div
+                    style="
+                      text-align: center;
+                      margin: 30px 0;
+                    "
+                  >
+                    <div
+                      style="
+                        display: inline-block;
+                        background-color: #f3e8ff;
+                        color: #7e22ce;
+                        font-size: 32px;
+                        font-weight: bold;
+                        letter-spacing: 8px;
+                        padding: 18px 25px;
+                        border-radius: 12px;
+                      "
+                    >
+                      ${otp}
+                    </div>
                   </div>
+
+                  <p
+                    style="
+                      text-align: center;
+                      color: #6b7280;
+                      font-size: 14px;
+                    "
+                  >
+                    This verification code will expire in
+                    <strong>5 minutes</strong>.
+                  </p>
+
+                  <p
+                    style="
+                      text-align: center;
+                      color: #9ca3af;
+                      font-size: 12px;
+                      margin-top: 30px;
+                      line-height: 1.5;
+                    "
+                  >
+                    If you didn't request this code,
+                    you can safely ignore this email.
+                  </p>
+
                 </div>
-
-                <p
-                  style="
-                    text-align: center;
-                    color: #6b7280;
-                    font-size: 14px;
-                  "
-                >
-                  This verification code will expire in
-                  <strong>5 minutes</strong>.
-                </p>
-
-                <p
-                  style="
-                    text-align: center;
-                    color: #9ca3af;
-                    font-size: 12px;
-                    margin-top: 30px;
-                    line-height: 1.5;
-                  "
-                >
-                  If you didn't request this code,
-                  you can safely ignore this email.
-                </p>
-
               </div>
-            </div>
-          </body>
-        </html>
-      `,
-    });
+            </body>
+          </html>
+        `,
+      });
+
+    // =========================
+    // RESEND EMAIL ERROR CHECK
+    // =========================
+
+    if (mailError) {
+      console.error("");
+      console.error("======================================");
+      console.error("        RESEND EMAIL ERROR ❌");
+      console.error("======================================");
+
+      console.error("Error:", mailError);
+
+      console.error("======================================");
+      console.error("");
+
+      throw new Error(
+        mailError.message || "Failed to send OTP email"
+      );
+    }
 
     // =========================
     // EMAIL DELIVERY DEBUG
@@ -260,10 +269,7 @@ const sendOTP = async (req, res) => {
     console.log("======================================");
 
     console.log("Recipient:", cleanEmail);
-    console.log("Message ID:", mailResult.messageId);
-    console.log("Accepted:", mailResult.accepted);
-    console.log("Rejected:", mailResult.rejected);
-    console.log("Response:", mailResult.response);
+    console.log("Resend Email ID:", mailResult?.id);
 
     console.log("======================================");
     console.log("OTP email send operation completed ✅");
@@ -298,10 +304,6 @@ const sendOTP = async (req, res) => {
 
     if (error.code) {
       console.error("Error code:", error.code);
-    }
-
-    if (error.response) {
-      console.error("SMTP response:", error.response);
     }
 
     console.error("======================================");
@@ -455,5 +457,4 @@ const verifyOTP = async (req, res) => {
 module.exports = {
   sendOTP,
   verifyOTP,
-  transporter,
 };
