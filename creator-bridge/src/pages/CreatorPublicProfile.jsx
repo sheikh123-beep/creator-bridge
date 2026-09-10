@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 
 const API_BASE_URL =
-  "http://localhost:5000";
+  "https://creator-bridge-backend.onrender.com";
 
 function CreatorPublicProfile() {
   const { id } = useParams();

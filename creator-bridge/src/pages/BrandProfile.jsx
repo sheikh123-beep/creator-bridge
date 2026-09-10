@@ -48,7 +48,7 @@ function BrandProfile() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/profile/brand",
+        "https://creator-bridge-backend.onrender.com/api/profile/brand",
         {
           method: "POST",
           headers: {

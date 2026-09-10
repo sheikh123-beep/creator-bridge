@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const API_BASE_URL = "http://localhost:5000";
+const API_BASE_URL = "https://creator-bridge-backend.onrender.com";
 
 function AIMatching() {
   const [campaigns, setCampaigns] = useState([]);

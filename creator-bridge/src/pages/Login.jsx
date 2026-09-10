@@ -64,7 +64,7 @@ function Login() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/send-otp",
+        "https://creator-bridge-backend.onrender.com/api/auth/send-otp",
         {
           method: "POST",
 

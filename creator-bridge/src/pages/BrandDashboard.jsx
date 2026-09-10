@@ -88,7 +88,7 @@ function BrandDashboard() {
 
       try {
         const response = await fetch(
-          "http://localhost:5000/api/applications/received",
+          "https://creator-bridge-backend.onrender.com/api/applications/received",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -138,7 +138,7 @@ function BrandDashboard() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/applications/${applicationId}/status`,
+        `https://creator-bridge-backend.onrender.com/api/applications/${applicationId}/status`,
         {
           method: "PATCH",
           headers: {

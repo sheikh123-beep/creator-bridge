@@ -49,7 +49,7 @@ function Otp() {
       setLoading(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/auth/verify-otp",
+        "https://creator-bridge-backend.onrender.com/api/auth/verify-otp",
         {
           method: "POST",
 
@@ -184,7 +184,7 @@ function Otp() {
       setError("");
 
       const response = await fetch(
-        "http://localhost:5000/api/auth/send-otp",
+        "https://creator-bridge-backend.onrender.com/api/auth/send-otp",
         {
           method: "POST",
 

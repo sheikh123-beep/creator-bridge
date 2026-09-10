@@ -50,7 +50,7 @@ const CreateCampaign = () => {
       setAiLoading(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/ai/generate-campaign",
+        "https://creator-bridge-backend.onrender.com/api/ai/generate-campaign",
         {
           method: "POST",
 
@@ -218,7 +218,7 @@ const CreateCampaign = () => {
       setLoading(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/campaigns",
+        "https://creator-bridge-backend.onrender.com/api/campaigns",
         {
           method: "POST",
 

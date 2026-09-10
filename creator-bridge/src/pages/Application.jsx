@@ -5,7 +5,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-const API_BASE_URL = "http://localhost:5000";
+const API_BASE_URL = "https://creator-bridge-backend.onrender.com";
 
 function Application() {
   const navigate = useNavigate();

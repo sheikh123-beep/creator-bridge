@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import LogoutButton from "../components/LogoutButton";
 
-const API_BASE_URL = "http://localhost:5000";
+const API_BASE_URL = "https://creator-bridge-backend.onrender.com";
 
 function CreatorDashboard() {
   const creatorProfile =

@@ -63,7 +63,7 @@ function CampaignDetails() {
 
         const response =
           await fetch(
-            `http://localhost:5000/api/campaigns/${campaignId}`,
+            `https://creator-bridge-backend.onrender.com/api/campaigns/${campaignId}`,
             {
               method: "GET",
               headers: {
